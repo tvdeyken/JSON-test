@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style type="text/css">
+        #listjs {
+            width: 1000px;
+            left: 50%;
+            position: relative;
+            transform: translateX(-50%);
+            margin-top: 50px;
+        }
+        input {
+            border:solid 1px #ccc;
+            border-radius: 5px;
+            padding:7px 14px;
+            margin-bottom:10px
+        }
+        input:focus {
+            outline:none;
+            border-color:#aaa;
+        }
+        ul.list {
+            display: table;
+            margin: 0px;
+            padding: 0px;
+        }
+        .pagination li {
+            display:inline-block;
+            padding:5px;
+        }
+        .list li {
+            display: flex;
+            list-style-type: none;
+        }
+        .list li div {
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid grey;
+            margin: 3px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="listjs">
+    <input class="search" placeholder="Search" />
+    <ul class="list"></ul>
+
+    <ul class="pagination"></ul>
+</div>
+
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script type="text/javascript">
+    var jsonEndpoint = "https://tvdeyken.github.io/JSON-test/tariffs.json";
+    var userList = null;
+    var valueNames = [ 'country', 'postcode', 'weight' ];
+
+    var options = {
+        valueNames: valueNames,
+        item: getItemTemplate(valueNames),
+        pagination: true,
+        page: 10
+    };
+
+    $(function() {
+        loadJSON();
+    });
+
+    function getItemTemplate(valueNames) {
+        var itemString = "";
+        $.each( valueNames, function( i, name ) {
+            itemString += "<div class='" +  name + "'></div>";
+        });
+        return "<li>" + itemString + "</li>"
+    }
+
+    function loadJSON() {
+        $.getJSON( jsonEndpoint, function( data ) {
+            userList = new List('listjs', options, data);
+        });
+    }
+</script>
+</body>
+</html>
